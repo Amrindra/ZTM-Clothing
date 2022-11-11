@@ -3,6 +3,7 @@ import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase";
+import Button from "../button/Button";
 import FormInput from "../formInput/FormInput";
 import "./SignUp.scss";
 
@@ -56,8 +57,9 @@ const SignUp = () => {
   };
 
   return (
-    <div>
-      <h1>Sign Up with email and password</h1>
+    <div className="sign-up-container">
+      <h2>Don't have an account? </h2>
+      <span>Sign Up with email and password</span>
       <form onSubmit={handleOnSubmit}>
         <FormInput
           label="Name"
@@ -95,7 +97,7 @@ const SignUp = () => {
           onChange={handleOnChange}
         />
 
-        <button type="submit">Sign Up</button>
+        <Button type="submit">Sign Up</Button>
       </form>
     </div>
   );
