@@ -40,7 +40,13 @@ export const signInWithGoogleRedirect = () =>
 export const db = getFirestore();
 
 // ****CREATING THE USER DOCUMENT IN THE FIREBASE STORE****
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInfo = {}
+) => {
+  // This line is used to protect the app from breaking in case of google change their method
+  if (!userAuth) return;
+
   // uid comes from the auth response when user sign in
   const userDocRef = doc(db, "users", userAuth.uid);
 
@@ -57,6 +63,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         displayName,
         email,
         createAt,
+        ...additionalInfo,
       });
     } catch (error) {
       console.log("Error creating the user", error.message);
