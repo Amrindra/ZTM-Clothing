@@ -5,6 +5,7 @@ import {
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
@@ -21,20 +22,24 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 
 // To use Google Authentication, first we need to initialize the GoogleAuthProvider class that we recieved
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
 // This setCustomParameters is use to tell google how we want google to behave
-provider.setCustomParameters({
+googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 
 // Instantiated the firestore
 export const db = getFirestore();
 
-// CREATING THE USER DOCUMENT IN THE FIREBASE STORE
+// ****CREATING THE USER DOCUMENT IN THE FIREBASE STORE****
 export const createUserDocumentFromAuth = async (userAuth) => {
   // uid comes from the auth response when user sign in
   const userDocRef = doc(db, "users", userAuth.uid);
@@ -59,4 +64,11 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   }
 
   return userDocRef;
+};
+
+// **** CREATE USER BY EMAIL AND PASSWORD
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+
+  return await createUserWithEmailAndPassword(auth, email, password);
 };
