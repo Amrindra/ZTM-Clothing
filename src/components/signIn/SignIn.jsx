@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-import { UserContext } from "../../contexts/userContext";
+import { useState } from "react";
 import {
   createUserDocumentFromAuth,
   signInWithGooglePopup,
@@ -18,8 +17,6 @@ const SignIn = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const { email, password } = formData;
 
-  const { setCurrentUser } = useContext(UserContext);
-
   // Reset form section
   const resetFormData = () => {
     setFormData(defaultFormData);
@@ -27,10 +24,7 @@ const SignIn = () => {
 
   // Sign in with google section
   const signInGoogleUser = async () => {
-    // First we need to get the response from the user.
-    const response = await signInWithGooglePopup();
-    // Once users sign in we pass the response.user to createUserDocumentFromAuth to create document if users never been existing
-    await createUserDocumentFromAuth(response.user);
+    await signInWithGooglePopup();
   };
 
   const handleOnChange = (event) => {
@@ -43,7 +37,6 @@ const SignIn = () => {
 
     try {
       const response = await signAuthUserWithEmailAndPassword(email, password);
-      setCurrentUser(response.user);
 
       resetFormData();
     } catch (error) {
