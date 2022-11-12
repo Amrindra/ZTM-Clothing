@@ -96,5 +96,6 @@ export const signOutUser = async () => await signOut(auth);
 // **** Observer for Change listenter****
 export const onAuthStateChangedListenter = (callback) => {
   // onAuthStateChanged is used to listen the any chanage such as user sign in or sing out
+  // when this method get called, we say hey create a listener for me using this callback
   onAuthStateChanged(auth, callback);
 };
