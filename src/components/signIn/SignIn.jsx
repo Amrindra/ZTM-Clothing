@@ -41,7 +41,16 @@ const SignIn = () => {
 
       console.log(response);
       resetFormData();
-    } catch (error) {}
+    } catch (error) {
+      if (
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/user-not-found"
+      ) {
+        alert("Wrong credential!");
+      } else {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -69,7 +78,7 @@ const SignIn = () => {
 
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button onClick={signInGoogleUser} buttonType="google">
+          <Button type="button" onClick={signInGoogleUser} buttonType="google">
             Sign In with google
           </Button>
         </div>
