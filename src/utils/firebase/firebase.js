@@ -37,7 +37,7 @@ export const signInWithGooglePopup = () =>
 export const signInWithGoogleRedirect = () =>
   signInWithRedirect(auth, googleProvider);
 
-// Instantiated the firestore
+// Instantiated the firestore (firststore is a database)
 export const db = getFirestore();
 
 // ****CREATING THE USER DOCUMENT IN THE FIREBASE STORE****

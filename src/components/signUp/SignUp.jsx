@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/userContext";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -16,19 +17,20 @@ const defaultFormData = {
 
 const SignUp = () => {
   const [formData, setFormData] = useState(defaultFormData);
+  const { email, password, confirmPassword, displayName } = formData;
 
-  // console.log(formData);
+  const { setCurrentUser } = useContext(UserContext);
 
   const resetFormData = () => {
     setFormData(defaultFormData);
   };
 
-  const { email, password, confirmPassword, displayName } = formData;
-
   const handleOnChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  console.log("test");
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
@@ -43,6 +45,8 @@ const SignUp = () => {
         email,
         password
       );
+
+      setCurrentUser(response.user);
 
       // This line will save the user to the database
       await createUserDocumentFromAuth(response.user, { displayName });
