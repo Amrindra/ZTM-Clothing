@@ -10,7 +10,16 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -41,6 +50,42 @@ export const signInWithGoogleRedirect = () =>
 
 // Instantiated the firestore (firststore is a database)
 export const db = getFirestore();
+
+// This function is used to add collection to the database
+// collectionKey parameter is the name of collection that we want to add to the firestore
+// objectsToAdd parameter is from local object that we want to push to the database via this funtion
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const batch = writeBatch(db);
+  // collectionKey in this case will be whaterever name that we want to name in the firestore collection
+  const collectionRef = collection(db, collectionKey);
+
+  //Recieve data from local data and then loop through it and add them to the document
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done");
+};
+
+// Getting data from the document
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};
 
 // ****CREATING THE USER DOCUMENT IN THE FIREBASE STORE****
 export const createUserDocumentFromAuth = async (
