@@ -36,7 +36,7 @@ const SignIn = () => {
     event.preventDefault();
 
     try {
-      const response = await signAuthUserWithEmailAndPassword(email, password);
+      await signAuthUserWithEmailAndPassword(email, password);
 
       resetFormData();
     } catch (error) {
