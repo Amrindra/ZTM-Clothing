@@ -72,19 +72,13 @@ export const addCollectionAndDocuments = async (
   console.log("done");
 };
 
-// Getting data from the document
+// Fetching / Getting data from the document
 export const getCategoriesAndDocuments = async () => {
   const collectionRef = collection(db, "categories");
-  const q = query(collectionRef);
+  const query_collection = query(collectionRef);
 
-  const querySnapshot = await getDocs(q);
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    acc[title.toLowerCase()] = items;
-    return acc;
-  }, {});
-
-  return categoryMap;
+  const querySnapshot = await getDocs(query_collection);
+  return querySnapshot.docs.map((doc) => doc.data());
 };
 
 // ****CREATING THE USER DOCUMENT IN THE FIREBASE STORE****
