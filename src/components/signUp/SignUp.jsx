@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { signUpStart } from "../../store/user/userAction";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -17,6 +19,7 @@ const defaultFormData = {
 const SignUp = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const { email, password, confirmPassword, displayName } = formData;
+  const dispatch = useDispatch();
 
   const resetFormData = () => {
     setFormData(defaultFormData);
@@ -31,24 +34,18 @@ const SignUp = () => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("Password do not match!");
+      alert("passwords do not match");
       return;
     }
 
     try {
-      const response = await createAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
-
-      // This line will save the user to the database
-      await createUserDocumentFromAuth(response.user, { displayName });
+      dispatch(signUpStart(email, password, displayName));
       resetFormData();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        alert("Email already in use");
+        alert("Cannot create user, email already in use");
       } else {
-        console.log("User creation encountered error", error);
+        console.log("user creation encountered an error", error);
       }
     }
   };

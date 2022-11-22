@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
-  createUserDocumentFromAuth,
-  signInWithGooglePopup,
-  signAuthUserWithEmailAndPassword,
-} from "../../utils/firebase/firebase";
+  emailSignInStart,
+  googleSignInStart,
+} from "../../store/user/userAction";
+
 import Button from "../button/Button";
 import FormInput from "../formInput/FormInput";
 import "./SignIn.scss";
@@ -16,6 +17,7 @@ const defaultFormData = {
 const SignIn = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const { email, password } = formData;
+  const dispatch = useDispatch();
 
   // Reset form section
   const resetFormData = () => {
@@ -23,8 +25,8 @@ const SignIn = () => {
   };
 
   // Sign in with google section
-  const signInGoogleUser = async () => {
-    await signInWithGooglePopup();
+  const signInWithGoogle = async () => {
+    dispatch(googleSignInStart());
   };
 
   const handleOnChange = (event) => {
@@ -36,18 +38,10 @@ const SignIn = () => {
     event.preventDefault();
 
     try {
-      await signAuthUserWithEmailAndPassword(email, password);
-
+      dispatch(emailSignInStart(email, password));
       resetFormData();
     } catch (error) {
-      if (
-        error.code === "auth/wrong-password" ||
-        error.code === "auth/user-not-found"
-      ) {
-        alert("Wrong credential!");
-      } else {
-        console.log(error);
-      }
+      console.log("user sign in failed", error);
     }
   };
 
@@ -76,7 +70,7 @@ const SignIn = () => {
 
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button type="button" onClick={signInGoogleUser} buttonType="google">
+          <Button type="button" onClick={signInWithGoogle} buttonType="google">
             Sign In with google
           </Button>
         </div>

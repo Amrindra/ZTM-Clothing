@@ -56,10 +56,11 @@ export const db = getFirestore();
 // objectsToAdd parameter is from local object that we want to push to the database via this funtion
 export const addCollectionAndDocuments = async (
   collectionKey,
-  objectsToAdd
+  objectsToAdd,
+  field
 ) => {
-  const batch = writeBatch(db);
   // collectionKey in this case will be whaterever name that we want to name in the firestore collection
+  const batch = writeBatch(db);
   const collectionRef = collection(db, collectionKey);
 
   //Recieve data from local data and then loop through it and add them to the document
@@ -112,7 +113,7 @@ export const createUserDocumentFromAuth = async (
     }
   }
 
-  return userDocRef;
+  return userSnapshot;
 };
 
 // **** CREATE USER BY EMAIL AND PASSWORD*****
@@ -123,7 +124,7 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
 };
 
 // **** SIGN IN USER BY EMAIL AND PASSWORD****
-export const signAuthUserWithEmailAndPassword = async (email, password) => {
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
 
   return await signInWithEmailAndPassword(auth, email, password);
@@ -137,4 +138,17 @@ export const onAuthStateChangedListenter = (callback) => {
   // onAuthStateChanged is used to listen the any chanage such as user sign in or sing out
   // when this method get called, we say hey create a listener for me using this callback
   onAuthStateChanged(auth, callback);
+};
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
 };
