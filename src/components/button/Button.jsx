@@ -1,17 +1,18 @@
-import { BaseButton } from "./ButtonStyle";
+import { BaseButton, LoadingSpinner } from "./ButtonStyle";
 
-const BUTTON_TYPE_CLASSES = {
+export const BUTTON_TYPE_CLASSES = {
   google: "google-sign-in",
   inverted: "inverted",
 };
 
-const Button = ({ children, buttonType, ...otherProps }) => {
+const Button = ({ children, buttonType, isLoading, ...otherProps }) => {
   return (
     <BaseButton
       className={`button-container ${BUTTON_TYPE_CLASSES[buttonType]}`}
       {...otherProps}
+      disabled={isLoading}
     >
-      {children}
+      {isLoading ? <LoadingSpinner /> : children}
     </BaseButton>
   );
 };
