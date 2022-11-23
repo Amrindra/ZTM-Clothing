@@ -8,7 +8,7 @@ export const BUTTON_TYPE_CLASSES = {
 const Button = ({ children, buttonType, isLoading, ...otherProps }) => {
   return (
     <BaseButton
-      className={`button-container ${BUTTON_TYPE_CLASSES[buttonType]}`}
+      // className={`button-container ${BUTTON_TYPE_CLASSES[buttonType]}`}
       {...otherProps}
       disabled={isLoading}
     >
