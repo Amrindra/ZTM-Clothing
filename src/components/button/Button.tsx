@@ -1,11 +1,17 @@
+import { ButtonHTMLAttributes, FC } from "react";
 import { BaseButton, LoadingSpinner } from "./ButtonStyle";
 
-export const BUTTON_TYPE_CLASSES = {
-  google: "google-sign-in",
-  inverted: "inverted",
-};
+export enum BUTTON_TYPE_CLASSES {
+  google = "google-sign-in",
+  inverted = "inverted",
+}
 
-const Button = ({ children, buttonType, isLoading, ...otherProps }) => {
+export type ButtonProps = {
+  buttonType?: BUTTON_TYPE_CLASSES;
+  isLoading?: boolean;
+} & ButtonHTMLAttributes<HTMLButtonElement>;
+
+const Button: FC<ButtonProps> = ({ children, buttonType, isLoading, ...otherProps }) => {
   return (
     <BaseButton
       // className={`button-container ${BUTTON_TYPE_CLASSES[buttonType]}`}
