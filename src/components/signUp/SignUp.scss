@@ -6,4 +6,12 @@
     h2{
         margin: 10px 0;
     }
+
+    @media (max-width: 668px){
+        width: 100%;
+
+        h2, span{
+            text-align: center;
+        }
+    }
 }
